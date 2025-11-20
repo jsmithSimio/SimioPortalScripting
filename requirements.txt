@@ -1,0 +1,5 @@
+pandas
+pathlib
+dotenv
+pysimio
+ipykernnel
