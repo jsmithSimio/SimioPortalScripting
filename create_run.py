@@ -9,6 +9,7 @@ import os
 import threading
 from pysimio.classes import TimeOptions
 import datetime
+import pandas as pd
 
 #
 # Model-specific Data
@@ -66,4 +67,20 @@ sleep_time = 10 # seconds
 status = wait_for_run(api, run_id, sleep_time, 2000, False)
 theRun = get_run(api, run_id, True)
 print(f"Final run status after approx. {status[1]*sleep_time/60:.2f} minutes ({status[1]} cycles): {status[0]}")
-
+#
+# Get the experiment response results
+#
+rows_to_show = 5
+scenarios = api.getScenarios(run_id = run_id)
+# Convert to dataframe
+df, responses, controls = scenario_results_as_df(scenarios)
+# remove any scenarios with non-numeric values in the sort column
+df[sort_response] = pd.to_numeric(df[sort_response], errors='coerce')
+df_cleaned = df.dropna(subset=[sort_response])
+if len(df) > len (df_cleaned):
+    print(f"Removed {len(df)-len(df_cleaned)} rows with non-numeric values in the sort column.")
+print(f"Dataframe from run_id {run_id} includes {len(df_cleaned)} scenarios.")
+# --- Display the Table ---
+print(f"--- Top (up to) {rows_to_show} Scenario Response Averages by {sort_response} ---")
+df_sorted = df_cleaned.sort_values(by=sort_response, ascending=sort_ascending)
+print(df_sorted[:rows_to_show].to_string())
