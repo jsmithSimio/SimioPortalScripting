@@ -14,21 +14,22 @@ import pandas as pd
 #
 # Model-specific Data
 #
-model_id = 129
-experiment_id = 206
+model_id = 141
+experiment_id = 221
 run_name = "API01"
 # For sorting the scenarios after the run
 sort_response = "Throughput"
 sort_ascending = False
 # Create the json experiment payload
+# Careful - code will create all combinations of these values
 vars = {
-    "Buff1" : [3],
-    "Buff2" : [3],
-    "Buff3" : [3],
-    "CapA"  : [2, 4],
-    "CapB"  : [2, 4],
-    "CapC"  : [2, 4],
-    "CapD"  : [2, 4]
+    "Buff1" : [2, 3],
+    "Buff2" : [2, 3],
+    "Buff3" : [2, 3],
+    "CapA"  : [2, 3, 4],
+    "CapB"  : [2, 3, 4],
+    "CapC"  : [2, 3, 4],
+    "CapD"  : [2, 3, 4]
 }
 num_reps = 6
 experiment_def = create_ff_experiment(experiment_id, run_name, num_reps, vars)
